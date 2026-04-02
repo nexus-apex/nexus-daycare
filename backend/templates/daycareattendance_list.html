@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Daycareattendances | NexusDaycare{% endblock %}
+{% block page_title %}Daycareattendances{% endblock %}
+{% block content %}
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem">
+  <form class="search-bar" method="get" style="flex:1;margin-bottom:0">
+    <input type="text" name="search" value="{{ search }}" placeholder="Search daycareattendances...">
+    <select name="status" onchange="this.form.submit()">
+      <option value="">All Status</option>
+      <option value="present" {% if status_filter == 'present' %}selected{% endif %}>Present</option>
+      <option value="absent" {% if status_filter == 'absent' %}selected{% endif %}>Absent</option>
+      <option value="late" {% if status_filter == 'late' %}selected{% endif %}>Late</option>
+      <option value="half_day" {% if status_filter == 'half_day' %}selected{% endif %}>Half Day</option>
+    </select>
+    <button type="submit" class="btn btn-primary btn-sm">Search</button>
+  </form>
+  <a href="/daycareattendances/create/" class="btn btn-primary">+ New DaycareAttendance</a>
+</div>
+
+<div class="card">
+  {% if records %}
+  <table>
+    <thead>
+      <tr><th>Child Name</th><th>Date</th><th>Check In</th><th>Check Out</th><th>Status</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+      {% for r in records %}
+      <tr>
+        <td><a href="/daycareattendances/{{ r.pk }}/edit/"><strong>{{ r.child_name }}</strong></a></td>
+        <td style="color:var(--muted)">{{ r.date|date:"M d, Y"|default:"-" }}</td>
+        <td style="color:var(--muted)">{{ r.check_in|date:"M d, Y"|default:"-" }}</td>
+        <td style="color:var(--muted)">{{ r.check_out|date:"M d, Y"|default:"-" }}</td>
+        <td><span class="badge badge-blue">{{ r.get_status_display }}</span></td>
+        <td class="actions">
+          <a href="/daycareattendances/{{ r.pk }}/edit/" class="btn btn-primary btn-sm">Edit</a>
+          <form method="post" action="/daycareattendances/{{ r.pk }}/delete/" style="display:inline" onsubmit="return confirm('Delete?')">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-sm">Del</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty">
+    <p>No daycareattendances found.</p>
+    <a href="/daycareattendances/create/" class="btn btn-primary" style="margin-top:1rem">Create DaycareAttendance</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
