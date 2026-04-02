@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}{% if editing %}Edit{% else %}New{% endif %} DaycareAttendance | NexusDaycare{% endblock %}
+{% block page_title %}{% if editing %}Edit DaycareAttendance{% else %}New DaycareAttendance{% endif %}{% endblock %}
+{% block content %}
+<div class="card" style="max-width:750px">
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-row">
+      <div class="form-group">
+        <label>Child Name</label>
+        <input type="text" name="child_name" value="{{ record.child_name|default:'' }}">
+      </div>
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" name="date" value="{{ record.date|date:'Y-m-d'|default:'' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Check In</label>
+        <input type="date" name="check_in" value="{{ record.check_in|date:'Y-m-d'|default:'' }}">
+      </div>
+      <div class="form-group">
+        <label>Check Out</label>
+        <input type="date" name="check_out" value="{{ record.check_out|date:'Y-m-d'|default:'' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Status</label>
+        <select name="status">
+          <option value="present" {% if record.status == 'present' %}selected{% endif %}>Present</option>
+          <option value="absent" {% if record.status == 'absent' %}selected{% endif %}>Absent</option>
+          <option value="late" {% if record.status == 'late' %}selected{% endif %}>Late</option>
+          <option value="half_day" {% if record.status == 'half_day' %}selected{% endif %}>Half Day</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Notes</label>
+      <textarea name="notes">{{ record.notes|default:'' }}</textarea>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Marked By</label>
+        <input type="text" name="marked_by" value="{{ record.marked_by|default:'' }}">
+      </div>
+    </div>
+
+    <div style="display:flex;gap:0.75rem;margin-top:1rem">
+      <button type="submit" class="btn btn-primary">{% if editing %}Update{% else %}Create{% endif %} DaycareAttendance</button>
+      <a href="/daycareattendances/" class="btn" style="background:var(--border);color:var(--text)">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
