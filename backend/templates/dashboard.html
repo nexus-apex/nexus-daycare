@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | NexusDaycare{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block content %}
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-label">Total Childs</div>
+    <div class="stat-value">{{ child_count }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Total Daycareparents</div>
+    <div class="stat-value" style="background:linear-gradient(135deg,#10b981,#06b6d4);-webkit-background-clip:text;background-clip:text">{{ daycareparent_count }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Total Daycareattendances</div>
+    <div class="stat-value" style="background:linear-gradient(135deg,#f59e0b,#f97316);-webkit-background-clip:text;background-clip:text">{{ daycareattendance_count }}</div>
+  </div>
+</div>
+
+<div class="card">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+    <h3>Recent Childs</h3>
+    <a href="/childs/create/" class="btn btn-primary btn-sm">+ New Child</a>
+  </div>
+  {% if recent %}
+  <table>
+    <thead>
+      <tr><th>Name</th><th>Age</th><th>Parent Name</th><th>Parent Phone</th><th>Parent Email</th><th>Created</th></tr>
+    </thead>
+    <tbody>
+      {% for r in recent %}
+      <tr>
+        <td><a href="/childs/{{ r.pk }}/edit/">{{ r.name }}</a></td>
+        <td>{{ r.age|default:"-" }}</td><td>{{ r.parent_name|default:"-" }}</td><td>{{ r.parent_phone|default:"-" }}</td><td>{{ r.parent_email|default:"-" }}</td><td style="color:var(--muted)">{{ r.created_at|date:"M d, Y" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty">
+    <p>No records yet.</p>
+    <a href="/childs/create/" class="btn btn-primary" style="margin-top:1rem">Create First Child</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
