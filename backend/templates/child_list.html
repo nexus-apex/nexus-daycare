@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Childs | NexusDaycare{% endblock %}
+{% block page_title %}Childs{% endblock %}
+{% block content %}
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem">
+  <form class="search-bar" method="get" style="flex:1;margin-bottom:0">
+    <input type="text" name="search" value="{{ search }}" placeholder="Search childs...">
+    <select name="status" onchange="this.form.submit()">
+      <option value="">All Group</option>
+      <option value="infant" {% if status_filter == 'infant' %}selected{% endif %}>Infant</option>
+      <option value="toddler" {% if status_filter == 'toddler' %}selected{% endif %}>Toddler</option>
+      <option value="preschool" {% if status_filter == 'preschool' %}selected{% endif %}>Preschool</option>
+      <option value="after_school" {% if status_filter == 'after_school' %}selected{% endif %}>After School</option>
+    </select>
+    <button type="submit" class="btn btn-primary btn-sm">Search</button>
+  </form>
+  <a href="/childs/create/" class="btn btn-primary">+ New Child</a>
+</div>
+
+<div class="card">
+  {% if records %}
+  <table>
+    <thead>
+      <tr><th>Name</th><th>Age</th><th>Parent Name</th><th>Parent Phone</th><th>Parent Email</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+      {% for r in records %}
+      <tr>
+        <td><a href="/childs/{{ r.pk }}/edit/"><strong>{{ r.name }}</strong></a></td>
+        <td>{{ r.age|default:"-" }}</td>
+        <td>{{ r.parent_name|default:"-" }}</td>
+        <td>{{ r.parent_phone|default:"-" }}</td>
+        <td style="color:var(--muted)">{{ r.parent_email|default:"-" }}</td>
+        <td class="actions">
+          <a href="/childs/{{ r.pk }}/edit/" class="btn btn-primary btn-sm">Edit</a>
+          <form method="post" action="/childs/{{ r.pk }}/delete/" style="display:inline" onsubmit="return confirm('Delete?')">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-sm">Del</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty">
+    <p>No childs found.</p>
+    <a href="/childs/create/" class="btn btn-primary" style="margin-top:1rem">Create Child</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
