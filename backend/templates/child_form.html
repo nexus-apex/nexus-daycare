@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}{% if editing %}Edit{% else %}New{% endif %} Child | NexusDaycare{% endblock %}
+{% block page_title %}{% if editing %}Edit Child{% else %}New Child{% endif %}{% endblock %}
+{% block content %}
+<div class="card" style="max-width:750px">
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-row">
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" name="name" value="{{ record.name|default:'' }}">
+      </div>
+      <div class="form-group">
+        <label>Age</label>
+        <input type="number" name="age" value="{{ record.age|default:'0' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Parent Name</label>
+        <input type="text" name="parent_name" value="{{ record.parent_name|default:'' }}">
+      </div>
+      <div class="form-group">
+        <label>Parent Phone</label>
+        <input type="text" name="parent_phone" value="{{ record.parent_phone|default:'' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Parent Email</label>
+        <input type="email" name="parent_email" value="{{ record.parent_email|default:'' }}">
+      </div>
+      <div class="form-group">
+        <label>Group</label>
+        <select name="group">
+          <option value="infant" {% if record.group == 'infant' %}selected{% endif %}>Infant</option>
+          <option value="toddler" {% if record.group == 'toddler' %}selected{% endif %}>Toddler</option>
+          <option value="preschool" {% if record.group == 'preschool' %}selected{% endif %}>Preschool</option>
+          <option value="after_school" {% if record.group == 'after_school' %}selected{% endif %}>After School</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Allergies</label>
+      <textarea name="allergies">{{ record.allergies|default:'' }}</textarea>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Status</label>
+        <select name="status">
+          <option value="enrolled" {% if record.status == 'enrolled' %}selected{% endif %}>Enrolled</option>
+          <option value="waitlisted" {% if record.status == 'waitlisted' %}selected{% endif %}>Waitlisted</option>
+          <option value="graduated" {% if record.status == 'graduated' %}selected{% endif %}>Graduated</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Joined Date</label>
+        <input type="date" name="joined_date" value="{{ record.joined_date|date:'Y-m-d'|default:'' }}">
+      </div>
+    </div>
+
+    <div style="display:flex;gap:0.75rem;margin-top:1rem">
+      <button type="submit" class="btn btn-primary">{% if editing %}Update{% else %}Create{% endif %} Child</button>
+      <a href="/childs/" class="btn" style="background:var(--border);color:var(--text)">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
