@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}{% if editing %}Edit{% else %}New{% endif %} DaycareParent | NexusDaycare{% endblock %}
+{% block page_title %}{% if editing %}Edit DaycareParent{% else %}New DaycareParent{% endif %}{% endblock %}
+{% block content %}
+<div class="card" style="max-width:750px">
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-row">
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" name="name" value="{{ record.name|default:'' }}">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" name="email" value="{{ record.email|default:'' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Phone</label>
+        <input type="text" name="phone" value="{{ record.phone|default:'' }}">
+      </div>
+      <div class="form-group">
+        <label>Children Count</label>
+        <input type="number" name="children_count" value="{{ record.children_count|default:'0' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Emergency Contact</label>
+        <input type="text" name="emergency_contact" value="{{ record.emergency_contact|default:'' }}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Address</label>
+      <textarea name="address">{{ record.address|default:'' }}</textarea>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Billing Status</label>
+        <select name="billing_status">
+          <option value="current" {% if record.billing_status == 'current' %}selected{% endif %}>Current</option>
+          <option value="overdue" {% if record.billing_status == 'overdue' %}selected{% endif %}>Overdue</option>
+          <option value="prepaid" {% if record.billing_status == 'prepaid' %}selected{% endif %}>Prepaid</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:0.75rem;margin-top:1rem">
+      <button type="submit" class="btn btn-primary">{% if editing %}Update{% else %}Create{% endif %} DaycareParent</button>
+      <a href="/daycareparents/" class="btn" style="background:var(--border);color:var(--text)">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
